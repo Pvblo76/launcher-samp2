@@ -1,0 +1,23 @@
+workflows:
+  android-build:
+    name: Build con Gradle 8.1.1
+    environment:
+      vars:
+        GRADLE_VERSION: "8.1.1"
+      java: 17
+
+    scripts:
+      - name: Usa Gradle 8.1.1 invece di quello del progetto
+        script: |
+          wget https://services.gradle.org/distributions/gradle-$GRADLE_VERSION-bin.zip
+          unzip -q gradle-$GRADLE_VERSION-bin.zip
+          export PATH="$PWD/gradle-$GRADLE_VERSION/bin:$PATH"
+          gradle --version
+
+      - name: Build del progetto
+        script: |
+          gradle assembleDebug --no-daemon
+
+    artifacts:
+      - build/**/outputs/**/*.apk
+      - build/**/outputs/**/*.aab
